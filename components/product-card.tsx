@@ -3,13 +3,14 @@ import { Stripe } from "stripe";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 interface Props {
   product: Stripe.Product;
 }
 
 export const ProductCard = ({ product }: Props) => {
-    const price = product.default_price as Stripe.Price;
+  const price = product.default_price as Stripe.Price;
   return (
     <Link href={`/products/${product.id}`}>
       <Card>
@@ -34,6 +35,7 @@ export const ProductCard = ({ product }: Props) => {
                 ${(price.unit_amount / 100).toFixed(2)}
               </p>
             )}
+            <Button>View Details</Button>
           </CardContent>
         </CardHeader>
       </Card>

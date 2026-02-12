@@ -1,19 +1,38 @@
-import { stripe } from "@/lib/stripe";
+"use client";
+
 import { Stripe } from "stripe";
 import { ProductCard } from "./product-card";
+import { useState } from "react";
 
 interface Props {
   products: Stripe.Product[];
 }
 
 export const ProductList = ({ products }: Props) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const filteredProducts = products.filter((product) => {
+    const term = searchTerm.toLowerCase();
+    const nameMatch = product.name.toLowerCase().includes(term);
+    const descriptionMatch = product.description
+      ? product.description?.toLowerCase().includes(term)
+      : false;
+    return nameMatch || descriptionMatch;
+  });
+
   return (
     <div>
       <div>
-        <input type="text" placeholder="Search products" />
+        <input
+          type="text"
+          placeholder="Search products"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchTerm}
+          className="w-full max-w-md rounded border border-gray-300 px-4 py-2 focus:outline-none "
+        />
       </div>
       <ul>
-        {products.map((product) => {
+        {filteredProducts.map((product) => {
           return (
             <li>
               <ProductCard product={product} />
